@@ -1,26 +1,51 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  DateRangePicker,
+  DateRangePickerProps,
+  SpaceBetween,
+  Tiles,
+  TilesProps,
+} from "@cloudscape-design/components";
+import { vehiculos } from "../../env";
 
 function Buscar() {
-  const [count, setCount] = useState(0)
-
+  const [value, setValue] = React.useState("");
+  const [date, setDate] = React.useState<any>(undefined);
+  const [items, setItems] = useState<TilesProps.TilesDefinition[]>([]);
+  useEffect(() => {
+    setItems(
+      vehiculos.map((val) => {
+        return {
+          label: val.marca + " " + val.modelo,
+          value: val.id.toString(),
+        };
+      })
+    );
+  }, []);
   return (
     <>
-      <div>
-      </div>
+      <div></div>
       <h1>Buscar</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <p>Seleccione un vehiculo</p>
+      <SpaceBetween size={"m"}>
+        <Tiles
+          onChange={({ detail }) => setValue(detail.value)}
+          value={value}
+          items={items}
+        />
+        <DateRangePicker
+          onChange={({ detail }) => setDate(detail.value)}
+          rangeSelectorMode="absolute-only"
+          value={date} isValidRange={(function (): DateRangePickerProps.ValidationResult {
+            throw new Error("Function not implemented.");
+          }) } relativeOptions={[]}
+          placeholder="Seleccione fecha y tiempo"/>
+        <Button>Buscar aparcamiento</Button>
+      </SpaceBetween>
     </>
-  )
+  );
 }
 
-export default Buscar
+export default Buscar;

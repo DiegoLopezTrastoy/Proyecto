@@ -66,3 +66,12 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.imagenInicio {
+  width: 90%;
+  height: 50%;
+  display: flex;
+  align-self: center;
+  clip-path: polygon(0% 10%, 100% 10%, 100% 100%, 0% 100%);
+  object-fit: cover;
+}

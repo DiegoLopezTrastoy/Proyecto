@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import {
+  AnnotationContext,
   AppLayout,
+  Hotspot,
   Icon,
   SideNavigation,
   SpaceBetween,
@@ -13,112 +15,195 @@ import {
   applyMode,
 } from "@cloudscape-design/global-styles";
 import TopNavigation from "@cloudscape-design/components/top-navigation";
-import { blanco, logo, negro, nombreApp } from "../env";
+import { blanco, negro, nombreApp } from "../env";
+import logo from "/public/logoOscuro.png";
+import logo2 from "/public/logoClaro.png";
 
 function App() {
   applyDensity(Density.Comfortable);
   const [open, setOpen] = useState(true);
   const [mode, setMode] = useState(Mode.Dark);
+  const [favicon] = useState(document.createElement("link"));
+  favicon.rel = "icon";
 
   useEffect(() => {
     applyMode(mode);
+    if (mode == Mode.Dark) {
+      favicon.href = logo;
+    } else {
+      favicon.href = logo2;
+    }
   }, [mode]);
+
+  useEffect(() => {
+    document.head.appendChild(favicon);
+  }, []);
 
   return (
     <>
-      <SpaceBetween direction="vertical" size="xxs">
-        <TopNavigation
-          identity={{
-            href: "/#",
-            title: nombreApp,
-            logo: {
-              src: logo,
-              alt: nombreApp,
-            },
-          }}
-          utilities={[
+      <AnnotationContext
+        onStartTutorial={() => {}}
+        onExitTutorial={() => {}}
+        currentTutorial={{
+          title: "1",
+          description: "2",
+          completedScreenDescription: "",
+          completed: false,
+          tasks: [
             {
-              type: "button",
-              iconName: "notification",
-              title: "Notifications",
-              ariaLabel: "Notifications (unread)",
-              badge: true,
-              disableUtilityCollapse: false,
-            },
-            {
-              type: "button",
-              iconSvg:
-                mode == Mode.Dark ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    viewBox="0 -960 960 960"
-                    width="24"
-                  >
-                    <g fill={blanco}>
-                      <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z" />
-                    </g>
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    viewBox="0 -960 960 960"
-                    width="24"
-                  >
-                    <g fill={blanco}>
-                      <path d="M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 80q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z" />
-                    </g>
-                  </svg>
-                ),
-              ariaLabel: "Settings",
-              title: "Settings",
-              onClick: () =>
-                setMode(mode == Mode.Dark ? Mode.Light : Mode.Dark),
-            },
-            {
-              type: "button",
-              iconName: "user-profile",
-            },
-          ]}
-        />
-
-        <AppLayout
-          maxContentWidth={Number.MAX_VALUE}
-          toolsHide={true}
-          navigationOpen={open}
-          onNavigationChange={() => setOpen(!open)}
-          navigation={
-            <SideNavigation
-              header={{
-                href: "/#",
-                text: nombreApp,
-              }}
-              items={[
+              title: "Inicio de la página",
+              steps: [
                 {
-                  type: "link",
-                  text: `Buscar aparcamiento`,
-                  href: `#/buscar`,
-                  info: <Icon name="search" />,
+                  title: "Buscar aparcamiento",
+                  content: (
+                    <>
+                      En esta pestaña, encontrarás un formulario para reservar
+                      plazas de aparcamiento.
+                    </>
+                  ),
+                  hotspotId: "1",
                 },
                 {
-                  type: "link",
-                  text: `Mis vehiculos`,
-                  href: `#/vehiculos`,
-                  info: (
-                    <Icon
-                      svg={
-                        <svg
-                          version="1.0"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 1280.000000 806.000000"
-                        >
-                          <g
-                            transform="translate(0.000000,806.000000) scale(0.100000,-0.100000)"
-                            fill={mode == Mode.Dark ? blanco : negro}
-                          >
-                            <path
-                              d="M6736 8049 c-1092 -74 -2057 -470 -2916 -1198 -188 -159 -476 -443
+                  title: "Block all public access",
+                  content: (
+                    <>
+                      Keep this checkbox selected to prevent unauthorized access
+                      to your bucket.{" "}
+                    </>
+                  ),
+                  hotspotId: "2",
+                  warningAlert:
+                    "Selecting a different value for this checkbox from the recommendation of the tutorial can result in your data being exposed to unauthorized access.",
+                },
+                {
+                  title: "Create bucket",
+                  content: "Submit the form to create the bucket.",
+                  hotspotId: "create-bucket-button",
+                },
+              ],
+            },
+          ],
+        }}
+        i18nStrings={{
+          labelDismissAnnotation: '',
+          stepCounterText: (stepIndex, totalStepCount) =>
+            "Paso " + (stepIndex + 1) + "/" + totalStepCount,
+          taskTitle: (taskIndex, taskTitle) =>
+            "Parte " + (taskIndex + 1) + ": " + taskTitle,
+          labelHotspot: (openState, stepIndex, totalStepCount) =>
+            openState
+              ? "close annotation for step " +
+                (stepIndex + 1) +
+                " of " +
+                totalStepCount
+              : "open annotation for step " +
+                (stepIndex + 1) +
+                " of " +
+                totalStepCount,
+          nextButtonText: "Siguiente",
+          previousButtonText: "Anterior",
+          finishButtonText: "Finalizar",
+        }}
+      >
+        <SpaceBetween direction="vertical" size="xxs">
+          <TopNavigation
+            identity={{
+              href: "/#",
+              title: nombreApp,
+              logo: {
+                src: logo,
+                alt: nombreApp,
+              },
+            }}
+            utilities={[
+              {
+                type: "button",
+                iconName: "notification",
+                title: "Notifications",
+                ariaLabel: "Notifications (unread)",
+                badge: true,
+                disableUtilityCollapse: false,
+              },
+              {
+                type: "button",
+                iconSvg:
+                  mode == Mode.Dark ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <g fill={blanco}>
+                        <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z" />
+                      </g>
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <g fill={blanco}>
+                        <path d="M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 80q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z" />
+                      </g>
+                    </svg>
+                  ),
+                ariaLabel: "Settings",
+                title: "Settings",
+                onClick: () =>
+                  setMode(mode == Mode.Dark ? Mode.Light : Mode.Dark),
+              },
+              {
+                type: "button",
+                iconName: "user-profile",
+              },
+            ]}
+          />
+
+          <AppLayout
+            maxContentWidth={Number.MAX_VALUE}
+            toolsHide={true}
+            navigationOpen={open}
+            onNavigationChange={() => setOpen(!open)}
+            navigation={
+              <SideNavigation
+                header={{
+                  href: "/#",
+                  text: nombreApp,
+                }}
+                items={[
+                  {
+                    type: "link",
+                    text: `Buscar aparcamiento`,
+                    href: `#/buscar`,
+                    info: (
+                      <>
+                        <Icon name="search" />{" "}
+                        <Hotspot side="right" hotspotId="1" />
+                      </>
+                    ),
+                  },
+                  {
+                    type: "link",
+                    text: `Mis vehiculos`,
+                    href: `#/vehiculos`,
+                    info: (
+                      <>
+                        <Icon
+                          svg={
+                            <svg
+                              version="1.0"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 1280.000000 806.000000"
+                            >
+                              <g
+                                transform="translate(0.000000,806.000000) scale(0.100000,-0.100000)"
+                                fill={mode == Mode.Dark ? blanco : negro}
+                              >
+                                <path
+                                  d="M6736 8049 c-1092 -74 -2057 -470 -2916 -1198 -188 -159 -476 -443
 -656 -646 -119 -133 -241 -282 -414 -503 -296 -377 -501 -556 -734 -641 -47
 -16 -187 -53 -313 -81 -340 -75 -481 -121 -698 -224 -229 -110 -368 -208 -517
 -364 -245 -258 -394 -613 -452 -1082 -37 -298 -47 -701 -20 -878 61 -413 316
@@ -141,90 +226,93 @@ function App() {
 -153 -104 -57 -18 -110 -19 -986 -19 -911 0 -926 0 -968 20 -51 25 -88 77
 -117 162 -21 62 -21 79 -25 757 -3 738 2 888 38 983 28 75 81 124 147 134 26
 4 57 11 68 15 11 5 76 7 145 5 98 -4 155 -12 265 -40z"
-                            />
-                            <path
-                              d="M3148 3579 c-704 -68 -1305 -547 -1528 -1217 -64 -193 -81 -291 -87
+                                />
+                                <path
+                                  d="M3148 3579 c-704 -68 -1305 -547 -1528 -1217 -64 -193 -81 -291 -87
 -512 -9 -326 39 -556 172 -836 226 -471 668 -831 1176 -958 917 -230 1850 283
 2144 1179 98 296 116 613 54 919 -180 893 -1021 1513 -1931 1425z m402 -969
 c41 -12 113 -41 160 -65 168 -88 288 -211 370 -380 59 -123 80 -200 87 -330
 23 -423 -282 -803 -704 -876 -38 -7 -117 -10 -187 -7 -105 4 -135 10 -223 40
 -223 76 -383 215 -488 423 -65 130 -87 222 -88 375 -2 220 60 387 207 564 109
 129 312 244 488 276 89 15 292 5 378 -20z"
-                            />
-                            <path
-                              d="M9880 3580 c-948 -99 -1656 -911 -1617 -1855 42 -994 874 -1763 1862
+                                />
+                                <path
+                                  d="M9880 3580 c-948 -99 -1656 -911 -1617 -1855 42 -994 874 -1763 1862
 -1722 383 16 740 147 1040 381 108 86 275 261 357 376 375 530 432 1228 148
 1815 -254 525 -756 898 -1330 990 -120 19 -349 26 -460 15z m316 -951 c276
 -48 513 -230 629 -483 59 -127 78 -228 72 -386 -3 -102 -10 -152 -27 -205 -53
 -166 -156 -319 -282 -420 -78 -62 -221 -135 -313 -161 -90 -25 -293 -30 -388
 -10 -332 68 -595 333 -662 665 -23 110 -16 295 14 395 92 308 341 539 651 601
 81 16 227 18 306 4z"
-                            />
-                          </g>
-                        </svg>
-                      }
-                    />
-                  ),
-                },
-                {
-                  type: "link",
-                  text: `Mis reservas`,
-                  href: `#/reservas`,
-                  info: <Icon name="view-horizontal" />,
-                },
-                {
-                  type: "link",
-                  text: `Aparcamientos`,
-                  href: `#/aparcamientos`,
-                  info: (
-                    <Icon
-                      svg={
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 619.756 619.756"
-                        >
-                          <g fill={mode == Mode.Dark ? blanco : negro}>
-                            <path
-                              d="M476.517,92.151c-6.827,0-11.396,0.659-13.786,1.318v43.561c2.825,0.645,6.334,0.886,11.15,0.886
-                   c17.71,0,28.67-8.983,28.67-24.077C502.551,100.248,493.127,92.151,476.517,92.151L476.517,92.151z"
-                            />
-                            <path
-                              d="M522.026,147.966c-11.378,10.714-28.234,15.54-47.937,15.54c-4.38,0-8.306-0.204-11.339-0.63v52.738
-                   h-33.07V70.042c10.277-1.745,24.727-3.048,45.073-3.048c20.573,0,35.25,3.944,45.11,11.818c9.425,7.433,15.758,19.697,15.758,34.15
-                   C535.602,127.392,530.767,139.651,522.026,147.966L522.026,147.966z M589.284,7.035H369.419c-16.839,0-30.473,12.88-30.473,28.775
-                   v207.587c0,15.895,13.634,28.78,30.473,28.78h219.864c16.801,0,30.473-12.885,30.473-28.78V35.81
-                   C619.756,19.915,606.084,7.035,589.284,7.035L589.284,7.035z"
-                            />
-                            <path
-                              d="M451.373,462.58c-28.007,0-50.723-22.721-50.723-50.729c0-28.016,22.716-50.723,50.723-50.723
-                   c28.008,0,50.705,22.707,50.705,50.723C502.078,439.859,479.38,462.58,451.373,462.58L451.373,462.58z M110.407,462.58
-                   c-28.012,0-50.729-22.721-50.729-50.729c0-28.016,22.707-50.723,50.729-50.723c28.017,0,50.714,22.707,50.714,50.723
-                   C161.121,439.859,138.414,462.58,110.407,462.58L110.407,462.58z M530.9,301.667H58.745l97.972-169.236
-                   c0,0,3.541-6.954,20.066-6.954H278.15c0,0,24.044,1.631,23.162-15.037c-0.891-8.846-5.755-14.904-16.231-14.904
-                   c-10.334,0-134.858,0-134.858,0s-6.352,0.294-13.292,12.254c-6.196,10.619-92.814,160.685-112.137,194.328
-                   C10.775,304.63,0,318.35,0,335.017v153.598c0,18.602,13.146,33.354,29.368,33.354h29.358v73.629
-                   c0,9.159,5.912,16.535,13.292,16.535h47.357c7.225,0,13.273-7.376,13.273-16.535v-73.629h295.686v74.236
-                   c0,9.14,5.896,16.516,13.141,16.516h46.76c7.225,0,13.141-7.376,13.141-16.516v-74.236h29.506
-                   c16.231,0,29.372-14.753,29.372-33.354V335.017C560.272,316.567,547.131,301.667,530.9,301.667L530.9,301.667z"
-                            />
-                          </g>
-                        </svg>
-                      }
-                    />
-                  ),
-                },
-                {
-                  type: "link",
-                  text: `Contactanos`,
-                  href: `#/contacto`,
-                  info: <Icon name="call" />,
-                },
-              ]}
-            />
-          }
-          content={<Outlet />}
-        />
-      </SpaceBetween>
+                                />
+                              </g>
+                            </svg>
+                          }
+                        />
+                        <Hotspot side="right" hotspotId="2" />
+                      </>
+                    ),
+                  },
+                  {
+                    type: "link",
+                    text: `Mis reservas`,
+                    href: `#/reservas`,
+                    info: <Icon name="view-horizontal" />,
+                  },
+                  // {
+                  //   type: "link",
+                  //   text: `Aparcamientos`,
+                  //   href: `#/aparcamientos`,
+                  //   info: (
+                  //     <Icon
+                  //       svg={
+                  //         <svg
+                  //           xmlns="http://www.w3.org/2000/svg"
+                  //           viewBox="0 0 619.756 619.756"
+                  //         >
+                  //           <g fill={mode == Mode.Dark ? blanco : negro}>
+                  //             <path
+                  //               d="M476.517,92.151c-6.827,0-11.396,0.659-13.786,1.318v43.561c2.825,0.645,6.334,0.886,11.15,0.886
+                  //    c17.71,0,28.67-8.983,28.67-24.077C502.551,100.248,493.127,92.151,476.517,92.151L476.517,92.151z"
+                  //             />
+                  //             <path
+                  //               d="M522.026,147.966c-11.378,10.714-28.234,15.54-47.937,15.54c-4.38,0-8.306-0.204-11.339-0.63v52.738
+                  //    h-33.07V70.042c10.277-1.745,24.727-3.048,45.073-3.048c20.573,0,35.25,3.944,45.11,11.818c9.425,7.433,15.758,19.697,15.758,34.15
+                  //    C535.602,127.392,530.767,139.651,522.026,147.966L522.026,147.966z M589.284,7.035H369.419c-16.839,0-30.473,12.88-30.473,28.775
+                  //    v207.587c0,15.895,13.634,28.78,30.473,28.78h219.864c16.801,0,30.473-12.885,30.473-28.78V35.81
+                  //    C619.756,19.915,606.084,7.035,589.284,7.035L589.284,7.035z"
+                  //             />
+                  //             <path
+                  //               d="M451.373,462.58c-28.007,0-50.723-22.721-50.723-50.729c0-28.016,22.716-50.723,50.723-50.723
+                  //    c28.008,0,50.705,22.707,50.705,50.723C502.078,439.859,479.38,462.58,451.373,462.58L451.373,462.58z M110.407,462.58
+                  //    c-28.012,0-50.729-22.721-50.729-50.729c0-28.016,22.707-50.723,50.729-50.723c28.017,0,50.714,22.707,50.714,50.723
+                  //    C161.121,439.859,138.414,462.58,110.407,462.58L110.407,462.58z M530.9,301.667H58.745l97.972-169.236
+                  //    c0,0,3.541-6.954,20.066-6.954H278.15c0,0,24.044,1.631,23.162-15.037c-0.891-8.846-5.755-14.904-16.231-14.904
+                  //    c-10.334,0-134.858,0-134.858,0s-6.352,0.294-13.292,12.254c-6.196,10.619-92.814,160.685-112.137,194.328
+                  //    C10.775,304.63,0,318.35,0,335.017v153.598c0,18.602,13.146,33.354,29.368,33.354h29.358v73.629
+                  //    c0,9.159,5.912,16.535,13.292,16.535h47.357c7.225,0,13.273-7.376,13.273-16.535v-73.629h295.686v74.236
+                  //    c0,9.14,5.896,16.516,13.141,16.516h46.76c7.225,0,13.141-7.376,13.141-16.516v-74.236h29.506
+                  //    c16.231,0,29.372-14.753,29.372-33.354V335.017C560.272,316.567,547.131,301.667,530.9,301.667L530.9,301.667z"
+                  //             />
+                  //           </g>
+                  //         </svg>
+                  //       }
+                  //     />
+                  //   ),
+                  // },
+                  {
+                    type: "link",
+                    text: `Contactanos`,
+                    href: `#/contacto`,
+                    info: <Icon name="call" />,
+                  },
+                ]}
+              />
+            }
+            content={<Outlet />}
+          />
+        </SpaceBetween>
+      </AnnotationContext>
     </>
   );
 }

@@ -10,6 +10,7 @@ import MisVehiculos from "./pages/MisVehiculos.tsx";
 import Aparcamientos from "./pages/Aparcamientos.tsx";
 import Contactanos from "./pages/Contactanos.tsx";
 import Reservas from "./pages/reservas.tsx";
+import Indice from "./pages/indice.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <>
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="reservas" element={<Reservas />} />,
               <Route path="aparcamientos" element={<Aparcamientos />} />,
               <Route path="contacto" element={<Contactanos />} />,
+              <Route path="/" element={<Indice></Indice>}/>,
             ]}
           />
         </Routes>

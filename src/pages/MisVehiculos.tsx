@@ -1,26 +1,109 @@
-import { useState } from 'react'
+import {
+  Button,
+  Cards,
+  Container,
+  Form,
+  FormField,
+  Input,
+  SpaceBetween,
+  Tabs,
+} from "@cloudscape-design/components";
+import { vehiculos } from "../../env";
+import { useState } from "react";
 
 function MisVehiculos() {
-  const [count, setCount] = useState(0)
+  const [marca, setMarca] = useState("");
+  const [modelo, setModelo] = useState("");
+  const [activeTab, setActiveTab] = useState("first");
 
   return (
     <>
-      <div>
-      </div>
       <h1>Vehiculos</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Tabs
+        activeTabId={activeTab}
+        onChange={({ detail }) => setActiveTab(detail.activeTabId)}
+        tabs={[
+          {
+            label: "Ver mis vehiculos",
+            id: "first",
+            content: (
+              <Cards
+                ariaLabels={{
+                  itemSelectionLabel: (_e, t) =>
+                    `select ${t.marca + " " + t.modelo}`,
+                  selectionGroupLabel: "",
+                }}
+                cardDefinition={{
+                  header: (item) => <>{item.marca + " " + item.modelo}</>,
+                  sections: [
+                    {
+                      id: "Marca",
+                      header: "Marca",
+                      content: (item) => item.marca,
+                    },
+                    {
+                      id: "Modelo",
+                      header: "Modelo",
+                      content: (item) => item.modelo,
+                    },
+                  ],
+                }}
+                cardsPerRow={[{ cards: 1 }, { minWidth: 200, cards: 5 }]}
+                items={vehiculos}
+                visibleSections={["Marca", "Modelo"]}
+              />
+            ),
+          },
+          {
+            label: "Añadir vehiculo",
+            id: "second",
+            content: (
+              <>
+                <form onSubmit={(e) => e.preventDefault()}>
+                  <Form
+                    actions={
+                      <SpaceBetween direction="horizontal" size="xs">
+                        <Button
+                          formAction="none"
+                          variant="link"
+                          onClick={() => setActiveTab("first")}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="primary"
+                          onClick={() => setActiveTab("first")}
+                        >
+                          Submit
+                        </Button>
+                      </SpaceBetween>
+                    }
+                  >
+                    <Container>
+                      <SpaceBetween direction="vertical" size="l">
+                        <FormField label="Marca">
+                          <Input
+                            value={marca}
+                            onChange={({ detail }) => setMarca(detail.value)}
+                          />
+                        </FormField>
+                        <FormField label="Modelo">
+                          <Input
+                            value={modelo}
+                            onChange={({ detail }) => setModelo(detail.value)}
+                          />
+                        </FormField>
+                      </SpaceBetween>
+                    </Container>
+                  </Form>
+                </form>
+              </>
+            ),
+          },
+        ]}
+      />
     </>
-  )
+  );
 }
 
-export default MisVehiculos
+export { MisVehiculos as Component, MisVehiculos as default };
