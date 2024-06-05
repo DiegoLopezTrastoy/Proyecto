@@ -4,6 +4,8 @@ import {
   Container,
   Form,
   FormField,
+  Grid,
+  Hotspot,
   Input,
   SpaceBetween,
   Tabs,
@@ -24,7 +26,12 @@ function MisVehiculos() {
         onChange={({ detail }) => setActiveTab(detail.activeTabId)}
         tabs={[
           {
-            label: "Ver mis vehiculos",
+            label: (
+              <>
+                Ver mis vehiculos
+                <Hotspot side="right" hotspotId="9" />
+              </>
+            ),
             id: "first",
             content: (
               <Cards
@@ -68,30 +75,40 @@ function MisVehiculos() {
                           variant="link"
                           onClick={() => setActiveTab("first")}
                         >
-                          Cancel
+                          Cancelar
                         </Button>
-                        <Button
-                          variant="primary"
-                          onClick={() => setActiveTab("first")}
-                        >
-                          Submit
-                        </Button>
+                        <Grid gridDefinition={[{ colspan: 9 }, { colspan: 1}]}>
+                          <Button
+                            variant="primary"
+                            onClick={() => setActiveTab("first")}
+                          >
+                            Enviar
+                          </Button>
+                          <Hotspot side="right" hotspotId="12" />
+
+                        </Grid>
                       </SpaceBetween>
                     }
                   >
                     <Container>
                       <SpaceBetween direction="vertical" size="l">
                         <FormField label="Marca">
-                          <Input
-                            value={marca}
-                            onChange={({ detail }) => setMarca(detail.value)}
-                          />
+                          <Grid gridDefinition={[{ colspan: 11 }]}>
+                            <Input
+                              value={marca}
+                              onChange={({ detail }) => setMarca(detail.value)}
+                            />
+                            <Hotspot side="right" hotspotId="10" />
+                          </Grid>
                         </FormField>
                         <FormField label="Modelo">
-                          <Input
-                            value={modelo}
-                            onChange={({ detail }) => setModelo(detail.value)}
-                          />
+                          <Grid gridDefinition={[{ colspan: 11 }]}>
+                            <Input
+                              value={modelo}
+                              onChange={({ detail }) => setModelo(detail.value)}
+                            />
+                            <Hotspot side="right" hotspotId="11" />
+                          </Grid>
                         </FormField>
                       </SpaceBetween>
                     </Container>

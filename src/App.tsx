@@ -64,28 +64,129 @@ function App() {
                   hotspotId: "1",
                 },
                 {
-                  title: "Block all public access",
+                  title: "Mis vehiculos",
                   content: (
                     <>
-                      Keep this checkbox selected to prevent unauthorized access
-                      to your bucket.{" "}
+                      Aquí encontrarás todos tus vehiculos y podras añadir mas.
                     </>
                   ),
                   hotspotId: "2",
-                  warningAlert:
-                    "Selecting a different value for this checkbox from the recommendation of the tutorial can result in your data being exposed to unauthorized access.",
                 },
                 {
-                  title: "Create bucket",
-                  content: "Submit the form to create the bucket.",
-                  hotspotId: "create-bucket-button",
+                  title: "Mis reservas",
+                  content: (
+                    <>
+                      En este apartado, encontrarás las reservas activas y
+                      antiguas.
+                    </>
+                  ),
+                  hotspotId: "3",
                 },
+                {
+                  title: "Contactanos",
+                  content: (
+                    <>
+                      Por ultimo, en este apartado, encontraras el formulario de
+                      contacto.
+
+                      <p>Para continuar, seleccione alguna de las pestañas.</p>
+                    </>
+                  ),
+                  hotspotId: "4",
+                },
+              ],
+            },
+            {
+              title: "Buscar",
+              steps: [
+                {
+                  hotspotId: '5',
+                  title: 'Vehiculo',
+                  content: <>Seleccione uno de los vehiculos.</>
+                },{
+                  hotspotId: '6',
+                  title: 'fecha',
+                  content: <>Seleccione fecha, hora y tiempo para la reserva.</>
+                },{
+                  hotspotId: '7',
+                  title: 'repetición',
+                  content: <>Seleccione si solo quiere realizar una reserva o quiere que se realicen reservas automaticas diarias por cierto tiempo.</>
+                },{
+                  hotspotId: '8',
+                  title: 'boton',
+                  content: <>Boton para realizar la reserva.</>
+                }
+              ],
+            },
+            {
+              title: "Mis vehiculos",
+              steps: [
+                {
+                  hotspotId: '9',
+                  title: 'Ver mis vehiculos',
+                  content: <>Lista de todos los vehiculos registrados.</>
+                },
+                {
+                  hotspotId: '10',
+                  title: 'Form vehiculos marca',
+                  content: <>Introduzca la marca del vehiculo.</>
+                },
+                {
+                  hotspotId: '11',
+                  title: 'Form vehiculos modelo',
+                  content: <>Introduzca el modelo del vehiculo.</>
+                },
+                {
+                  hotspotId: '12',
+                  title: 'Form vehiculos boton',
+                  content: <>Cuando los datos estén correctos, pulse este botón enviar para guardar el vehiculo.</>
+                }
+              ],
+            },
+            {
+              title: "Mis reservas",
+              steps: [
+                {
+                  hotspotId: '13',
+                  title: 'Reservas lista',
+                  content: <>Lista de todas las reservas realizadas.</>
+                },
+                {
+                  hotspotId: '14',
+                  title: 'Reservas boton',
+                  content: <>Este botón, te redirecciona a la pestaña de Buscar Aparcamineto.</>
+                }
+              ],
+            },
+            {
+              title: "Contactanos",
+              steps: [
+                {
+                  hotspotId: '15',
+                  title: 'Contacto Nombre',
+                  content: <>Introduce el nombre por el que te gustaría que te respondieran.</>
+                },
+                {
+                  hotspotId: '16',
+                  title: 'Conctacto Correo',
+                  content: <>Introduzca el correo electronico al que te gustaría que te contestasemos.</>
+                },
+                {
+                  hotspotId: '17',
+                  title: 'Contacto Asunto',
+                  content: <>Descripción corta del motivo de contacto</>
+                },
+                {
+                  hotspotId: '18',
+                  title: 'Contacto Mensaje',
+                  content: <>Escriba una descripción más detallada del mensaje</>
+                }
               ],
             },
           ],
         }}
         i18nStrings={{
-          labelDismissAnnotation: '',
+          labelDismissAnnotation: "",
           stepCounterText: (stepIndex, totalStepCount) =>
             "Paso " + (stepIndex + 1) + "/" + totalStepCount,
           taskTitle: (taskIndex, taskTitle) =>
@@ -257,7 +358,12 @@ c41 -12 113 -41 160 -65 168 -88 288 -211 370 -380 59 -123 80 -200 87 -330
                     type: "link",
                     text: `Mis reservas`,
                     href: `#/reservas`,
-                    info: <Icon name="view-horizontal" />,
+                    info: (
+                      <>
+                        <Icon name="view-horizontal" />
+                        <Hotspot side="right" hotspotId="3" />
+                      </>
+                    ),
                   },
                   // {
                   //   type: "link",
@@ -304,7 +410,12 @@ c41 -12 113 -41 160 -65 168 -88 288 -211 370 -380 59 -123 80 -200 87 -330
                     type: "link",
                     text: `Contactanos`,
                     href: `#/contacto`,
-                    info: <Icon name="call" />,
+                    info: (
+                      <>
+                        <Icon name="call" />
+                        <Hotspot side="right" hotspotId="4" />
+                      </>
+                    ),
                   },
                 ]}
               />
